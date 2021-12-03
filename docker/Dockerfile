@@ -40,10 +40,17 @@ RUN --mount=type=cache,id=apt-dev,target=/var/cache/apt \
 RUN python3 -m venv /home/venv
 
 ENV PATH="/home/venv/bin:$PATH"
+ARG DEBIAN_FRONTEND=noninteractive
+ENV DEBIAN_FRONTEND=noninteractive
 
 RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 1 \
     && update-alternatives --install /usr/local/bin/pip pip /usr/local/bin/pip3 1
 
+RUN apt-get update
+
+RUN apt-get -y install libtiff5-dev libjpeg8-dev libopenjp2-7-dev zlib1g-dev \
+    libfreetype6-dev liblcms2-dev libwebp-dev tcl8.6-dev tk8.6-dev python3-tk \
+    libharfbuzz-dev libfribidi-dev libxcb1-dev
 # This is only useful for cuda env
 RUN export USE_CUDA=1
 
